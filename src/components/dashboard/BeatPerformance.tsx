@@ -2,9 +2,14 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { MapPin, Target, CheckCircle } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { MapPin, Target, CheckCircle, Loader } from 'lucide-react';
 
-const BeatPerformance = () => {
+interface BeatPerformanceProps {
+  isLoading?: boolean;
+}
+
+const BeatPerformance = ({ isLoading = false }: BeatPerformanceProps) => {
   const beatData = [
     { beat: 'Beat A - Central Market', scheduled: 25, completed: 23, rate: 92 },
     { beat: 'Beat B - North District', scheduled: 20, completed: 18, rate: 90 },
@@ -17,6 +22,46 @@ const BeatPerformance = () => {
     (beatData.reduce((sum, beat) => sum + beat.completed, 0) / 
      beatData.reduce((sum, beat) => sum + beat.scheduled, 0)) * 100
   );
+
+  if (isLoading) {
+    return (
+      <Card className="h-full">
+        <CardHeader>
+          <CardTitle className="flex items-center text-lg">
+            <Loader className="h-5 w-5 mr-2 text-blue-600 animate-spin" />
+            Beat Performance & Completion Rate
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-2">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-8 w-16" />
+            </div>
+            <Skeleton className="h-3 w-full" />
+          </div>
+
+          <div className="space-y-4">
+            {[...Array(5)].map((_, index) => (
+              <div key={index} className="border rounded-lg p-4 bg-gray-50">
+                <div className="flex items-center justify-between mb-2">
+                  <Skeleton className="h-5 w-48" />
+                  <Skeleton className="h-6 w-12 rounded-full" />
+                </div>
+                
+                <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-20" />
+                </div>
+                
+                <Skeleton className="h-2 w-full" />
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="h-full">

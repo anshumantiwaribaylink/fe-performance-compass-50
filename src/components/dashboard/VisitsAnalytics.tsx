@@ -1,10 +1,15 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { Users, Calendar, TrendingUp } from 'lucide-react';
+import { Users, Calendar, TrendingUp, Loader } from 'lucide-react';
 
-const VisitsAnalytics = () => {
+interface VisitsAnalyticsProps {
+  isLoading?: boolean;
+}
+
+const VisitsAnalytics = ({ isLoading = false }: VisitsAnalyticsProps) => {
   const weeklyData = [
     { week: 'Week 1', visits: 85, planned: 90 },
     { week: 'Week 2', visits: 92, planned: 88 },
@@ -23,6 +28,39 @@ const VisitsAnalytics = () => {
 
   const totalVisits = weeklyData.reduce((sum, week) => sum + week.visits, 0);
   const averageDaily = Math.round(totalVisits / 30);
+
+  if (isLoading) {
+    return (
+      <Card className="h-full">
+        <CardHeader>
+          <CardTitle className="flex items-center text-lg">
+            <Loader className="h-5 w-5 mr-2 text-blue-600 animate-spin" />
+            Visits Analytics
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            {[...Array(3)].map((_, index) => (
+              <div key={index} className="text-center p-3 bg-blue-50 rounded-lg">
+                <Skeleton className="h-6 w-8 mx-auto mb-1" />
+                <Skeleton className="h-3 w-16 mx-auto" />
+              </div>
+            ))}
+          </div>
+
+          <div className="mb-6">
+            <Skeleton className="h-4 w-24 mb-3" />
+            <Skeleton className="h-32 w-full" />
+          </div>
+
+          <div>
+            <Skeleton className="h-4 w-32 mb-3" />
+            <Skeleton className="h-32 w-full" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="h-full">

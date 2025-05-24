@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -17,6 +16,15 @@ const Dashboard = () => {
   const [selectedFE, setSelectedFE] = useState('all');
   const [timeFrame, setTimeFrame] = useState('month');
   const [selectedArea, setSelectedArea] = useState('all');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleApplyFilters = () => {
+    setIsLoading(true);
+    // Simulate API call delay
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  };
 
   const overviewStats = [
     {
@@ -150,9 +158,13 @@ const Dashboard = () => {
               </div>
 
               <div className="flex items-end">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                <Button 
+                  className="w-full bg-blue-600 hover:bg-blue-700" 
+                  onClick={handleApplyFilters}
+                  disabled={isLoading}
+                >
                   <Calendar className="h-4 w-4 mr-2" />
-                  Apply Filters
+                  {isLoading ? 'Applying...' : 'Apply Filters'}
                 </Button>
               </div>
             </div>
@@ -181,12 +193,12 @@ const Dashboard = () => {
 
         {/* Main Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <BeatPerformance />
+          <BeatPerformance isLoading={isLoading} />
           <TotalSales />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <VisitsAnalytics />
+          <VisitsAnalytics isLoading={isLoading} />
           <AttendanceMetrics />
         </div>
 
