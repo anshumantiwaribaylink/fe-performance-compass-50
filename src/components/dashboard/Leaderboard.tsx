@@ -1,11 +1,15 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Trophy, Award, Medal, TrendingUp, Star } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Trophy, Award, Medal, TrendingUp, Star, Loader } from 'lucide-react';
 
-const Leaderboard = () => {
+interface LeaderboardProps {
+  isLoading?: boolean;
+}
+
+const Leaderboard = ({ isLoading = false }: LeaderboardProps) => {
   const monthlyData = [
     { rank: 1, name: 'Rajesh Kumar', score: 95, sales: 285000, visits: 142, badge: 'gold' },
     { rank: 2, name: 'Priya Sharma', score: 92, sales: 275000, visits: 138, badge: 'silver' },
@@ -47,6 +51,47 @@ const Leaderboard = () => {
         return 'bg-blue-100 text-blue-800 border-blue-300';
     }
   };
+
+  if (isLoading) {
+    return (
+      <Card className="h-full">
+        <CardHeader>
+          <CardTitle className="flex items-center text-lg">
+            <Loader className="h-5 w-5 mr-2 text-blue-600 animate-spin" />
+            FE Performance Leaderboard
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-2 mb-4">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+
+          <div className="space-y-3">
+            {[...Array(5)].map((_, index) => (
+              <div key={index} className="p-4 rounded-lg border-2 bg-gray-50">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-3">
+                    <Skeleton className="h-5 w-5 rounded" />
+                    <div>
+                      <Skeleton className="h-4 w-24 mb-1" />
+                      <Skeleton className="h-3 w-32" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-6 w-16" />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-20" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="h-full">

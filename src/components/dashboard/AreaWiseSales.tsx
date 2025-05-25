@@ -1,10 +1,14 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
-import { MapPin, TrendingUp, Users, Calendar } from 'lucide-react';
+import { MapPin, TrendingUp, Users, Calendar, Loader } from 'lucide-react';
 
-const AreaWiseSales = () => {
+interface AreaWiseSalesProps {
+  isLoading?: boolean;
+}
+
+const AreaWiseSales = ({ isLoading = false }: AreaWiseSalesProps) => {
   const areaData = [
     { 
       area: 'North Zone', 
@@ -57,6 +61,52 @@ const AreaWiseSales = () => {
   const totalSales = areaData.reduce((sum, area) => sum + area.sales, 0);
   const totalVisits = areaData.reduce((sum, area) => sum + area.visits, 0);
   const avgFrequency = (areaData.reduce((sum, area) => sum + area.frequency, 0) / areaData.length).toFixed(1);
+
+  if (isLoading) {
+    return (
+      <Card className="h-full">
+        <CardHeader>
+          <CardTitle className="flex items-center text-lg">
+            <Loader className="h-5 w-5 mr-2 text-blue-600 animate-spin" />
+            Area Wise Sales & Visit Frequency
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            {[...Array(3)].map((_, index) => (
+              <div key={index} className="text-center p-3 bg-gray-50 rounded-lg">
+                <Skeleton className="h-6 w-16 mx-auto mb-1" />
+                <Skeleton className="h-3 w-20 mx-auto" />
+              </div>
+            ))}
+          </div>
+
+          <div className="mb-6">
+            <Skeleton className="h-4 w-32 mb-3" />
+            <Skeleton className="h-32 w-full" />
+          </div>
+
+          <div className="space-y-3">
+            <Skeleton className="h-4 w-24" />
+            {[...Array(5)].map((_, index) => (
+              <div key={index} className="border rounded-lg p-3 bg-gray-50">
+                <div className="flex items-center justify-between mb-2">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-5 w-12" />
+                </div>
+                <div className="grid grid-cols-4 gap-2">
+                  <Skeleton className="h-3 w-16" />
+                  <Skeleton className="h-3 w-16" />
+                  <Skeleton className="h-3 w-16" />
+                  <Skeleton className="h-3 w-16" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="h-full">

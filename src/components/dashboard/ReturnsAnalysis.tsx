@@ -1,10 +1,14 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { RotateCcw, TrendingDown, AlertTriangle, DollarSign } from 'lucide-react';
+import { RotateCcw, TrendingDown, AlertTriangle, DollarSign, Loader } from 'lucide-react';
 
-const ReturnsAnalysis = () => {
+interface ReturnsAnalysisProps {
+  isLoading?: boolean;
+}
+
+const ReturnsAnalysis = ({ isLoading = false }: ReturnsAnalysisProps) => {
   const returnsSalesData = [
     { month: 'Jan', sales: 125000, returns: 8500, creditNotes: 12 },
     { month: 'Feb', sales: 138000, returns: 9200, creditNotes: 15 },
@@ -22,6 +26,57 @@ const ReturnsAnalysis = () => {
 
   const currentMonth = returnsSalesData[returnsSalesData.length - 1];
   const returnRate = ((currentMonth.returns / currentMonth.sales) * 100).toFixed(2);
+
+  if (isLoading) {
+    return (
+      <Card className="h-full">
+        <CardHeader>
+          <CardTitle className="flex items-center text-lg">
+            <Loader className="h-5 w-5 mr-2 text-blue-600 animate-spin" />
+            Returns vs Sales Analysis
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            {[...Array(2)].map((_, index) => (
+              <div key={index} className="text-center p-3 bg-gray-50 rounded-lg">
+                <Skeleton className="h-6 w-16 mx-auto mb-1" />
+                <Skeleton className="h-3 w-20 mx-auto" />
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            {[...Array(2)].map((_, index) => (
+              <div key={index} className="p-3 bg-gray-50 rounded-lg">
+                <Skeleton className="h-5 w-12 mb-1" />
+                <Skeleton className="h-3 w-16" />
+              </div>
+            ))}
+          </div>
+
+          <div className="mb-6">
+            <Skeleton className="h-4 w-24 mb-3" />
+            <Skeleton className="h-32 w-full" />
+          </div>
+
+          <div>
+            <Skeleton className="h-4 w-28 mb-3" />
+            <div className="flex">
+              <div className="w-1/2">
+                <Skeleton className="h-24 w-24 rounded-full mx-auto" />
+              </div>
+              <div className="w-1/2 space-y-2">
+                {[...Array(4)].map((_, index) => (
+                  <Skeleton key={index} className="h-3 w-32" />
+                ))}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="h-full">

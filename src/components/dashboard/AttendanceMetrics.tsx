@@ -1,10 +1,14 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Calendar, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Calendar, Clock, CheckCircle, XCircle, AlertCircle, Loader } from 'lucide-react';
 
-const AttendanceMetrics = () => {
+interface AttendanceMetricsProps {
+  isLoading?: boolean;
+}
+
+const AttendanceMetrics = ({ isLoading = false }: AttendanceMetricsProps) => {
   const attendanceData = {
     totalWorkingDays: 24,
     presentDays: 22,
@@ -57,6 +61,60 @@ const AttendanceMetrics = () => {
         return null;
     }
   };
+
+  if (isLoading) {
+    return (
+      <Card className="h-full">
+        <CardHeader>
+          <CardTitle className="flex items-center text-lg">
+            <Loader className="h-5 w-5 mr-2 text-blue-600 animate-spin" />
+            Attendance Metrics
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-2">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-8 w-16" />
+            </div>
+            <Skeleton className="h-3 w-full mb-4" />
+            
+            <div className="grid grid-cols-4 gap-3">
+              {[...Array(4)].map((_, index) => (
+                <div key={index} className="p-2 bg-gray-50 rounded-lg text-center">
+                  <Skeleton className="h-6 w-8 mx-auto mb-1" />
+                  <Skeleton className="h-3 w-12 mx-auto" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <Skeleton className="h-4 w-24 mb-3" />
+            <div className="space-y-2">
+              {[...Array(4)].map((_, index) => (
+                <Skeleton key={index} className="h-10 w-full" />
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <Skeleton className="h-4 w-28 mb-3" />
+            <div className="grid grid-cols-6 gap-1 mb-3">
+              {[...Array(24)].map((_, index) => (
+                <Skeleton key={index} className="w-8 h-8" />
+              ))}
+            </div>
+            <div className="flex items-center justify-center space-x-4">
+              {[...Array(3)].map((_, index) => (
+                <Skeleton key={index} className="h-3 w-12" />
+              ))}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="h-full">

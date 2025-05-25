@@ -1,11 +1,15 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CreditCard, AlertCircle, Clock, DollarSign, ArrowUpDown } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { CreditCard, AlertCircle, Clock, DollarSign, ArrowUpDown, Loader } from 'lucide-react';
 
-const AccountsReceivable = () => {
+interface AccountsReceivableProps {
+  isLoading?: boolean;
+}
+
+const AccountsReceivable = ({ isLoading = false }: AccountsReceivableProps) => {
   const [sortBy, setSortBy] = useState('amount'); // 'amount' or 'days'
 
   const pendingBills = [
@@ -92,6 +96,53 @@ const AccountsReceivable = () => {
         return <Clock className="h-4 w-4 text-gray-600" />;
     }
   };
+
+  if (isLoading) {
+    return (
+      <Card className="h-full">
+        <CardHeader>
+          <CardTitle className="flex items-center text-lg">
+            <Loader className="h-5 w-5 mr-2 text-blue-600 animate-spin" />
+            Accounts Receivable
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            {[...Array(3)].map((_, index) => (
+              <div key={index} className="text-center p-3 bg-gray-50 rounded-lg">
+                <Skeleton className="h-6 w-16 mx-auto mb-1" />
+                <Skeleton className="h-3 w-20 mx-auto" />
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-between items-center mb-4">
+            <Skeleton className="h-4 w-24" />
+            <div className="flex space-x-2">
+              <Skeleton className="h-8 w-16" />
+              <Skeleton className="h-8 w-16" />
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            {[...Array(6)].map((_, index) => (
+              <div key={index} className="border rounded-lg p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-5 w-16" />
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <Skeleton className="h-8 w-full" />
+                  <Skeleton className="h-8 w-full" />
+                  <Skeleton className="h-8 w-full" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="h-full">
